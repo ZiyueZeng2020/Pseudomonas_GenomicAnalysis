@@ -6,6 +6,7 @@
 #SBATCH --output=/dev/null
 #####Define variables for files required
 #######################################################################
+####################
 
 Assembly=$1
 OutDir=$2
