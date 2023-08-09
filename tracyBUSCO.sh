@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --output=/dev/null
 
-####Define variables for files required
+#####Define variables for files required
 Assembly=$1
 OutDir=$2
 ####Make output location 
