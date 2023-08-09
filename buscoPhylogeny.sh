@@ -3,13 +3,15 @@
 #SBATCH -J buscoPhylogeny 
 #SBATCH --mem=8G
 #SBATCH --cpus-per-task=64
+#SBATCH --mail-user=ziyue.zeng@niab.com
+#SBATCH --mail-type=END,FAIL
 
 ####Download strains to be analysed 
 ####Edit for Tracys use 
 export envs=/mnt/shared/scratch/jconnell/apps/miniconda3/envs
 
 source activate ${envs}/ncbi_datasets
-OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/pseudomonas_db
+OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/bacteria_db
 mkdir -p ${OutDir}/genomes
 cd ${OutDir}/genomes
 for x in GCA_000005845.2 GCA_000007805.1 GCA_000012245.1 GCA_000412675.1 GCA_002905685.2 \
@@ -30,7 +32,7 @@ conda deactivate
 ####Run Busco
 for x in $(ls ${OutDir}/genomes/*); do 
 mkdir -p ${OutDir}/buscoResults
-scriptdir=/mnt/shared/scratch/jconnell/sharedScripts
+scriptdir=/home/zzeng/git_hub/scripts/pseudomonasAnalysis
 sbatch ${scriptdir}/tracyBUSCO.sh ${x} ${OutDir}/buscoResults
 done 	
 
@@ -53,4 +55,4 @@ cd ${OutDir}/phylogenyResults/supermatrix
 iqtree -s SUPERMATRIX.phylip \
 -bb 1000 \
 -nt 8
-conda deactivte 
+conda deactivate 

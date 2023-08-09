@@ -4,8 +4,9 @@
 #SBATCH --mem=4G
 #SBATCH --cpus-per-task=8
 #SBATCH --output=/dev/null
-
 #####Define variables for files required
+#######################################################################
+
 Assembly=$1
 OutDir=$2
 ####Make output location 
@@ -22,7 +23,8 @@ cd ${TMPDIR}
 busco=/mnt/shared/scratch/jconnell/apps/miniconda3/envs/busco/bin/busco
 $busco \
  -i inFile \
- -l /mnt/shared/projects/niab/pseudomonas/busco_db/pseudomonadales_odb10 \
+ --offline \
+ -l /mnt/shared/projects/niab/pseudomonas/busco_db/bacteria_odb10 \
  -m genome \
  -c 8 \
  -o ${sf} 
