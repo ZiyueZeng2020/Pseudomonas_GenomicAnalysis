@@ -9,7 +9,7 @@
 ####Download strains to be analysed 
 ####Edit for Tracys use 
 export envs=/mnt/shared/scratch/jconnell/apps/miniconda3/envs
-OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/
+OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny
 mkdir -p ${OutDir}/ZZbuscoPhylogeny
 
 ###Copy genomes to be used
@@ -22,7 +22,7 @@ scriptdir=/home/zzeng/git_hub/scripts/pseudomonasAnalysis
 sbatch ${scriptdir}/tracyBUSCO.sh ${x} ${OutDir}/ZZbuscoPhylogeny/buscoResults
 done 	
 
-until [[ $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/* | wc -l) == $(ls ${OutDir}/ZZbuscoPhylogeny/buscoResults | wc -l) ]]; do
+until [[ $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/*.fna | wc -l) == $(ls ${OutDir}/ZZbuscoPhylogeny/buscoResults | wc -l) ]]; do
 	sleep 60s
 done
 
@@ -37,9 +37,9 @@ conda deactivate
 
 ####Create tree 
 source activate ${envs}/iqtree
-cd ${OutDir}/ZZbuscoPhylogeny/buscoResults/supermatrix
+cd ${OutDir}/ZZbuscoPhylogeny/phylogenyResults/supermatrix
 iqtree -s SUPERMATRIX.phylip \
 -bb 1000 \
--nt 8
+#-nt 8
 conda deactivate 
 

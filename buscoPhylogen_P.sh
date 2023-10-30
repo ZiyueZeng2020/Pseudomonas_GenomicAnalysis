@@ -8,12 +8,10 @@
 
 ####Download strains to be analysed 
 ####Edit for Tracys use 
-
-#This script -> /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/buscoPhylogeny.sh
 export envs=/mnt/shared/scratch/jconnell/apps/miniconda3/envs
 
 source activate ${envs}/ncbi_datasets
-OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/bacteria_db
+OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/P_db
 mkdir -p ${OutDir}/genomes
 cd ${OutDir}/genomes
 for x in GCA_000005845.2 GCA_000007805.1 GCA_000012245.1 GCA_000412675.1 GCA_002905685.2 \
@@ -35,7 +33,7 @@ conda deactivate
 for x in $(ls ${OutDir}/genomes/*); do 
 mkdir -p ${OutDir}/buscoResults
 scriptdir=/home/zzeng/git_hub/scripts/pseudomonasAnalysis
-sbatch ${scriptdir}/tracyBUSCO.sh ${x} ${OutDir}/buscoResults
+sbatch ${scriptdir}/tracyBUSCO_P.sh ${x} ${OutDir}/buscoResults
 done 	
 
 until [[ $(ls ${OutDir}/genomes/* | wc -l) == $(ls ${OutDir}/buscoResults | wc -l) ]]; do
@@ -57,13 +55,12 @@ cd ${OutDir}/phylogenyResults/supermatrix
 iqtree -s SUPERMATRIX.phylip \
 -bb 1000 \
 -nt 8 \
--m MF \
--mtree \
+-m JTT+I+G \
 -wbtl \
 -safe
 conda deactivate 
 
 #IQ tree setting is copied from MH script https://github.com/michhulin/Pseudomonas/blob/main/scripts/sub_iqtree.sh
-# -bb 1000 -m JTT+I+G
+
 
 
