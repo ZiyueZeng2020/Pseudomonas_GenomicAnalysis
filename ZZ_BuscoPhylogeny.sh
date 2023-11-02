@@ -41,5 +41,4 @@ cd ${OutDir}/ZZbuscoPhylogeny/phylogenyResults/supermatrix
 iqtree -s SUPERMATRIX.phylip \
 -bb 1000 \
 #-nt 8
-conda deactivate 
-
+conda deactivate

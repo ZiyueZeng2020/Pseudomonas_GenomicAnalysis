@@ -31,7 +31,3 @@ $busco \
  -o ${sf} 
 ####Copy files to outdir   
 cp -r ${sf} $OutDir
-
-
-
-

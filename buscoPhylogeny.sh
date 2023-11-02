@@ -65,5 +65,3 @@ conda deactivate
 
 #IQ tree setting is copied from MH script https://github.com/michhulin/Pseudomonas/blob/main/scripts/sub_iqtree.sh
 # -bb 1000 -m JTT+I+G
-
-
