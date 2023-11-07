@@ -13,6 +13,10 @@
 #Check whether the tool is ready to use: which fastANI (need to make sure the name of the tool is correct, including cases)
 #fastANI => /mnt/shared/scratch/zzeng/apps/conda/envs/pyani_env/bin/fastANI could specify the full path. But after checking "which fastANI", the path of fastANI is set, so only need to use "fastANI" in the first line.
 
+###ZZ reminder[Important]: 
+# Input format: ql,rl and -o must ALL be .txt files. If there is only one q or r use -q and -r and make sure the format is .fna
+# Input format: When using ql and rl list, genome file name does not have to end with .fna
+
 #Real path of this script: /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/fANI.sh
 
 source activate /mnt/shared/scratch/zzeng/apps/conda/envs/pyani_env
@@ -20,6 +24,8 @@ source activate /mnt/shared/scratch/zzeng/apps/conda/envs/pyani_env
 fastANI \
 -t $(nproc) \
 -k 16 \
---ql /mnt/shared/scratch/zzeng/pseudomonas_genomes/refgenonmes \
---rl /mnt/shared/scratch/zzeng/pseudomonas_genomes/refgenonmes \
--o /mnt/shared/scratch/zzeng/pseudomonasProject/ANI/fANI
+--ql /mnt/shared/scratch/zzeng/pseudomonas_genomes/refgenonmes_fna.txt \
+--rl /mnt/shared/scratch/zzeng/pseudomonas_genomes/refgenonmes.txt \
+-o /mnt/shared/scratch/zzeng/pseudomonasProject/ANI/fANI/tiral2.txt
+
+#/mnt/shared/scratch/zzeng/apps/conda/envs/pyani_env/bin/fastANI
