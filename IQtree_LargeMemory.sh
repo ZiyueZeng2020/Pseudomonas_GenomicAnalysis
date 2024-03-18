@@ -1,8 +1,8 @@
 #!/usr/bin/env bash 
 #SBATCH -p long
-#SBATCH -J IQtVCref
-#SBATCH --mem=20G
-#SBATCH --cpus-per-task=16
+#SBATCH -J IQtree
+#SBATCH --mem=150G
+#SBATCH --cpus-per-task=64
 
 
 #ZZ reminder:
@@ -11,17 +11,17 @@
 #If change the -m setting to be "-m MF \ -mtree \", it wont be compatibele with other settings (ModelFinder only cannot be combined with bootstrap analysis.), and the script wont work. 
 #-bb 10000 did not improve the performce of topology. So the settign should be kept the same as original.
 
-#Realpath of this sciprt: sbatch /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/IQtree.sh
+#Realpath of this sciprt: /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/IQtree.sh
 
 source activate /mnt/shared/scratch/jconnell/apps/miniconda3/envs/iqtree
-cd /mnt/shared/scratch/zzeng/pseudomonasProject/VC/Simple/Ref
+cd /mnt/shared/scratch/zzeng/pseudomonasProject/phylogeny/tree1204/supermatrix
 
-iqtree -s refstrains.fasta \
+iqtree -s SUPERMATRIX.phylip \
 -bb 1000 \
 -nt AUTO \
---redo-tree
-#-m GTR+I+G \
-#-safe
+-m JTT+I+G \
+-wbtl \
+-safe
 conda deactivate
 
 # cp mnt/shared/scratch/zzeng/pseudomonasProject/phylogeny/ZZ10000_Bdb/supermatrix/SUPERMATRIX.phylip.treefile Z1_SUPERMATRIX.phylip.treefile

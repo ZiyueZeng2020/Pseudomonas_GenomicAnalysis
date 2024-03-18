@@ -1,17 +1,25 @@
 #!/usr/bin/env bash 
 #SBATCH -p long
 #SBATCH -J buscoPhylogeny 
-#SBATCH --mem=8G
-#SBATCH --cpus-per-task=64
-#SBATCH --mail-user=ziyue.zeng@niab.com
-#SBATCH --mail-type=END,FAIL
+#SBATCH --mem=100G
+#SBATCH --cpus-per-task=8
+###SBATCH --mail-user=ziyue.zeng@niab.com
+###SBATCH --mail-type=END,FAIL
 
-#Real path of this script: /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/buscoPhylogen_P.sh
+#ZZ reminder: 
+#Check 1: busco database in /home/zzeng/git_hub/scripts/pseudomonasAnalysis/tracyBUSCO_P.sh: pseudomonadales_odb10 OR bacteria_odb10
+#Check 2: outdir should be /mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/buscoPhyloTree/XXX (specify genomes).
+#Check 3: memory used to be 8G, changed to 64G for running 892ANI ref strains. 
+#Check 4: changed cpus to be 8 beacuase phylogeny and IQtree only need 8 threads
+
+
+#Real path of this script: sbatch /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/buscoPhylogen_P.sh
+
 ####Download strains to be analysed 
 export envs=/mnt/shared/scratch/jconnell/apps/miniconda3/envs
 
 # source activate ${envs}/ncbi_datasets
- OutDir=/mnt/shared/scratch/${USER}/pseudomonasProject/phylogeny/BuscoPdb_ANIref
+ OutDir=/mnt/shared/scratch/zzeng/pseudomonasProject/phylogeny/buscoPhyloTree/mNGSampling4PG22
 # mkdir -p ${OutDir}/genomes
 # cd ${OutDir}/genomes
 # for x in GCA_000005845.2 GCA_000007805.1 GCA_000012245.1 GCA_000412675.1 GCA_002905685.2 \
@@ -29,14 +37,14 @@ export envs=/mnt/shared/scratch/jconnell/apps/miniconda3/envs
 # cd /home/${USER}
 # conda deactivate 
 
-####Run Busco
-for x in $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/ANIref892Ref22/*); do 
+###Run Busco
+for x in $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/mNGSampling4PG22*); do 
 mkdir -p ${OutDir}/buscoResults
 scriptdir=/home/zzeng/git_hub/scripts/pseudomonasAnalysis
 sbatch ${scriptdir}/tracyBUSCO_P.sh ${x} ${OutDir}/buscoResults
 done 	
 
-until [[ $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/ANIref892Ref22/* | wc -l) == $(ls ${OutDir}/buscoResults | wc -l) ]]; do
+until [[ $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/mNGSampling4PG22/* | wc -l) == $(ls ${OutDir}/buscoResults | wc -l) ]]; do
 	sleep 60s
 done
 
@@ -49,15 +57,15 @@ python /mnt/shared/scratch/jconnell/pseudomonas_software/buscoPhylogeny/BUSCO_ph
 -t 8
 conda deactivate 
 
-####Create tree 
-source activate ${envs}/iqtree
-cd ${OutDir}/phylogenyResults/supermatrix
-iqtree -s SUPERMATRIX.phylip \
--bb 1000 \
--nt 8 \
--m JTT+I+G \
--wbtl \
--safe
-conda deactivate 
+# ####Create tree 
+# source activate ${envs}/iqtree
+# cd ${OutDir}/phylogenyResults/supermatrix
+# iqtree -s SUPERMATRIX.phylip \
+# -bb 1000 \
+# -nt 8 \
+# -m JTT+I+G \
+# -wbtl \
+# -safe
+# conda deactivate 
 
 #IQ tree setting is copied from MH script https://github.com/michhulin/Pseudomonas/blob/main/scripts/sub_iqtree.sh

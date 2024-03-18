@@ -1,30 +1,49 @@
 #!/usr/bin/env bash
-#SBATCH -p long 
+#SBATCH -p short 
 #SBATCH -J ProVP 
 #SBATCH --mem=10G
 #SBATCH --cpus-per-task=4
 
-#Realpath of this script /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/prophage.sh
- 
-# runVibrant(){
-# source activate /mnt/shared/scratch/jconnell/apps/miniconda3/envs/vibrant 
-# for x in $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/ref9_PG/*); do
-# 	name=$(basename ${x} .fa)
-# 	outDir=/mnt/shared/scratch/zzeng/pseudomonasProject/prophageVP/vibrant/${name}
-# 	mkdir -p ${outDir}
-# 	cd ${outDir}
-# 	python /mnt/shared/scratch/jconnell/vibrant/VIBRANT/VIBRANT_run.py -i ${x}
-# done 
-# conda deactivate 
-# }
- 
-runPhiSpy(){
-for x in $(ls /mnt/shared/scratch/zzeng/pseudomonas_genomes/ref9_PG/*); do
-source activate /mnt/shared/scratch/jconnell/apps/miniconda3/envs/roary
-export PATH="$PATH:/mnt/shared/home/jconnell/miniconda3/pkgs/mcl-14.137-h470a237_3/bin"
+#ZZ reminder:
+#If the folder of outdir is there already, the results cannot be added in. Need to make sure there is no existed folder
+#Change ${genomeToCheck}
+#Change ${ResultsFolder}
+#Realpath of this script: sbatch /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/prophage.sh
+
+ genomeToCheck=/mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/test
+ ResultsFolder=/mnt/shared/scratch/zzeng/pseudomonasProject/prophage/mNG_test
+
+# genomeToCheck=/mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/mNGAll_fa1797
+# ResultsFolder=/mnt/shared/scratch/zzeng/pseudomonasProject/prophage/mNGAll1797
+
+runVibrant(){
+source activate /mnt/shared/scratch/jconnell/apps/miniconda3/envs/vibrant 
+for x in $(ls ${genomeToCheck}/*); do
 	name=$(basename ${x} .fa)
-	outDir=/mnt/shared/scratch/zzeng/pseudomonasProject/prophageVP/PhiSpy/${name}
+	outDir=${ResultsFolder}/vibrant/${name}
 	mkdir -p ${outDir}
+	cd ${outDir}
+	while [ $(squeue -u ${USER} --noheader | wc -l) -gt 100 ]; do
+    	sleep 60s
+  	done
+	python /mnt/shared/scratch/jconnell/vibrant/VIBRANT/VIBRANT_run.py -i ${x}
+done 
+conda deactivate 
+}
+
+#🌷🌷🌷
+#runVibrant
+
+prokka(){
+source activate /mnt/shared/scratch/jconnell/apps/miniconda3/envs/roary
+export PATH="$PATH:/mnt/shared/scratch/jconnell/apps/miniconda3/pkgs/mcl-14.137-h470a237_3/bin"
+find "${genomeToCheck}" -type f -name '*.fa' -print0 | while IFS= read -r -d $'\0' x; do
+	name=$(basename ${x} .fa)
+	outDir=${ResultsFolder}/PhiSpy/${name}
+	mkdir -p ${outDir}
+	while [ $(squeue -u ${USER} --noheader | wc -l) -gt 100 ]; do
+    	sleep 60s
+  	done
 	prokka \
 		--kingdom Bacteria \
 		--outdir ${outDir}/prokka \
@@ -32,17 +51,29 @@ export PATH="$PATH:/mnt/shared/home/jconnell/miniconda3/pkgs/mcl-14.137-h470a237
 		--locustag ${name} \
 		--prefix ${name} \
 		${x}
-conda deactivate 
-
-source activate /mnt/shared/scratch/zzeng/apps/conda/envs/phispy 
-PhiSpy.py ${outDir}/prokka/${name}.gbk -o ${outDir} 
-conda deactivate 
-done 
+done
+conda deactivate
 }
- 
- 
-runPhiSpy	
-#runVibrant
+
+#🌷🌷🌷
+prokka
+
+runPhiSpy(){
+source activate /mnt/shared/scratch/zzeng/apps/conda/envs/phispy 
+for x in $(ls ${genomeToCheck}/*); do
+	name=$(basename ${x} .fa)
+	outDir=${ResultsFolder}/PhiSpy/${name}
+	while [ $(squeue -u ${USER} --noheader | wc -l) -gt 100 ]; do
+    	sleep 60s
+  	done
+PhiSpy.py ${outDir}/prokka/${name}.gbk -o ${outDir} 
+done 
+conda deactivate 
+}
+
+
+#🌷🌷🌷
+#runPhiSpy	
 
 
 ##usful files
@@ -68,46 +99,3 @@ runPhiSpy
 
 # --output_choice 8
 ##########################################################################
-# Original JC script:
-# #!/usr/bin/env bash
-# #SBATCH -p long 
-# #SBATCH -J vibrant 
-# #SBATCH --mem=10G
-# #SBATCH --cpus-per-task=4
- 
-# runVibrant(){
-# source activate vibrant 
-# for x in $(ls /mnt/shared/scratch/jconnell/pseudomonasProject/vibrant_phispy/genomes/*); do
-# 	name=$(basename ${x} .fa)
-# 	outDir=/mnt/shared/scratch/jconnell/pseudomonasProject/vibrant_phispy/vibrant/${name}
-# 	mkdir -p ${outDir}
-# 	cd ${outDir}
-# 	python /mnt/shared/scratch/jconnell/vibrant/VIBRANT/VIBRANT_run.py -i ${x}
-# done 
-# conda deactivate 
-# }
- 
-# runPhiSpy(){
-# source activate roary
-# export PATH="$PATH:/home/jconnell/miniconda3/pkgs/mcl-14.137-h470a237_3/bin"
-# for x in $(ls /mnt/shared/scratch/jconnell/pseudomonasProject/vibrant_phispy/genomes/*); do
-# 	name=$(basename ${x} .fa)
-# 	outDir=/mnt/shared/scratch/jconnell/pseudomonasProject/vibrant_phispy/PhiSpy/${name}
-# 	mkdir -p ${outDir}
-# 	prokka \
-# 		--kingdom Bacteria \
-# 		--outdir ${outDir}/prokka \
-# 		--genus Pseudomonas \
-# 		--locustag ${name} \
-# 		--prefix ${name} \
-# 		${x}
-# conda deactivate 
-# source activate phispy 
-# PhiSpy.py -o ${outDir} ${outDir}/prokka/${name}.gbk
-# conda deactivate 
-# done 
-# }
- 
- 
-# runPhiSpy	
-runVibrant

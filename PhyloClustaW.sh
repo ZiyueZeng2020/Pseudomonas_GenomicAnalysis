@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH -p long
 #SBATCH -J clustalw
-#SBATCH --mem=1G
+#SBATCH --mem=10G
 #SBATCH --cpus-per-task=4
 #SBATCH --output=/dev/null
 

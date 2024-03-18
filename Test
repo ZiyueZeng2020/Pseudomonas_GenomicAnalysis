@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#SBATCH -J trim
+#SBATCH --partition=medium
+#SBATCH --mem=50G
+#SBATCH --cpus-per-task=8
+
+#Real path of this script: /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/trimGenome.sh
+
+outDirMain=/mnt/shared/scratch/zzeng/pseudomonasProject/SeqStrains
+strains=${outDirMain}/Test_2strains
+
+source activate /mnt/shared/scratch/zzeng/apps/conda/envs/trimGalore
+
+for x in $(ls ${strains}); do
+    TrimOutDir=${strains}/${x}/trimmed
+    cd ${strains}/${x}
+
+    trim_galore \
+    --quality 13 \
+    --fastqc \
+    --output_dir ${TrimOutDir} \
+    ${strains}/${x}/*fastq.gz
+
+	while [[ $(squeue -u ${USER} --noheader | wc -l) -gt 100 ]]; do 
+		sleep 60s
+	done 
+done

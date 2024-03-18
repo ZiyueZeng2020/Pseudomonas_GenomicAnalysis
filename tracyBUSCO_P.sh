@@ -5,8 +5,8 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --output=/dev/null
 #####Define variables for files required
-#######################################################################
-####################
+
+#ZZ reminder: need to check busco database: pseudomonadales_odb10 OR bacteria_odb10
 
 Assembly=$1
 OutDir=$2
@@ -31,3 +31,4 @@ $busco \
  -o ${sf} 
 ####Copy files to outdir   
 cp -r ${sf} $OutDir
+

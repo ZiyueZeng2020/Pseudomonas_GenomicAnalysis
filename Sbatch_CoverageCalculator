@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#SBATCH -J CovCal
+#SBATCH -p short 
+#SBATCH --mem=1G
+#SBATCH --cpus-per-task=1
+
+###Real path of this script: /home/zzeng/git_hub/scripts/pseudomonasAnalysis/Sbatch_CoverageCalculator
+
+###########################################
+######## Assembly coverage check ##########
+###########################################
+
+mNGstrains=/mnt/shared/scratch/zzeng/pseudomonasProject/SeqStrains/Test_2strains
+
+for x in $(ls ${mNGstrains}/*); do
+name=$(basename ${x})
+resultsDir=/mnt/shared/scratch/zzeng/pseudomonasProject/QC/Coverage/OnlineScript
+mkdir -p ${resultsDir}
+cd ${resultsDir}
+sbatch "/home/zzeng/git_hub/scripts/pseudomonasAnalysis/CoverageCalculator.sh" ${mNGstrains}/${x}/*fastq.gz ${mNGstrains}/${x}/assembly/filtered_contigs/*fasta
+mv coverage.tsv ${name}.tsv
+done
