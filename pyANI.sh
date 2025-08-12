@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-#SBATCH -p himem
-#SBATCH -J pANIsamp
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=400G
+#SBATCH -p long
+#SBATCH -J pANI
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=100G
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=1
 
@@ -13,18 +13,22 @@
 ###❗❗❗Input formmat: MUST be .fna or other fasta files. Otherwise cannot get all the results.
 ###❗❗❗In the slurm file, it shows "END" but does not mean the run is done. Need to check the job queue
 
-###💻This script -> sbatch /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/pyANI.sh
+###💻This script -> sbatch /home/zzeng/git_hub/scripts/pseudomonasAnalysis/pyANI.sh
 
-source activate /mnt/shared/scratch/zzeng/apps/conda/envs/pyani_env
+# Installation
+# conda create --name pyani --yes python=3.7
+# pip install pyani (had incompatibility issue using conda installation)
+# average_nucleotide_identity.py: pyani 0.2.12
 
-genome_dir=/mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/mNGField_Ps267_ANI860_fna_wrap
-outdir=/mnt/shared/projects/niab/ZZeng/ANI/mNG/mNGField_Ps267_ANI860_fna_wrap
+source /mnt/apps/users/zzeng/conda/bin/activate /mnt/apps/users/zzeng/conda/envs/pyani
 
-/mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/average_nucleotide_identity.py \
+genome_dir=/mnt/shared/scratch/zzeng/pANI/PG2d_Sampling124Agro75Ref100ReSeq1_genomes_wrap
+outdir=/mnt/shared/scratch/zzeng/pANI/pANI_PG2d_Sampling124Agro75Ref100Seq1
+
+/mnt/apps/users/zzeng/conda/envs/pyani/bin/average_nucleotide_identity.py \
 -i ${genome_dir} \
 -g \
 --gformat pdf,png,eps \
 -o $outdir \
 -m ANIm \
 -f 
-

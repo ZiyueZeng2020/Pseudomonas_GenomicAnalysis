@@ -8,13 +8,17 @@
 ####Specied identificaiton for MNG sequenced pseudomonas strains 
 ####Three methods, ANI, BLAST, MNG SI results
  
-###💻Real path of this script: /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/SpeciesIdentification.sh
+###💻Real path of this script: sbatch /mnt/shared/home/zzeng/git_hub/scripts/pseudomonasAnalysis/SpeciesIdentification.sh
 ##############################
 ######## Define paths ########
 ##############################
-outDirMain=/mnt/shared/scratch/zzeng/pseudomonasProject/SeqStrains
-strains=${outDirMain}/Test_2strains
+outDirMain=/mnt/shared/scratch/zzeng/pseudomonasProject/BlastGenome/Test
+strains=/mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/Test
+#/mnt/shared/scratch/zzeng/pseudomonasProject/SeqStrains/Test_2strains
+#/mnt/shared/scratch/zzeng/pseudomonas_genomes/mNG/SamplingPs_QC540
 mng_TD=/mnt/shared/projects/niab/pseudomonas/MNG_TD
+
+mkdir -p ${outDirMain}
 
 ##############################
 ######## Trim reads ##########
@@ -107,14 +111,16 @@ sed -i '/^$/d' ${outDirMain}/bestANIHits_OnlyColumns.txt
 blast(){
 # source activate /mnt/shared/scratch/zzeng/apps/conda/envs/samtools
 # for x in $(ls ${strains}); do
-#   	assembly=$(ls ${strains}/${x}/assembly/filtered_contigs/*.fasta)
+# 	assembly=$(ls ${strains}/*.fa)
+#   	#assembly=$(ls ${strains}/${x}/assembly/filtered_contigs/*.fasta)
 #   	mkdir -p ${outDirMain}/blastLists  
-#     samtools faidx ${assembly} $(sed -n 1p ${assembly}| sed 's/>//g') > ${outDirMain}/blastLists/${x}.txt
+#     #samtools faidx ${assembly} contig_1 > ${outDirMain}/blastLists/${x}.txt
+# 	samtools faidx ${assembly} $(sed -n 1p ${assembly}| sed 's/>//g') > ${outDirMain}/blastLists/${x}.txt
 # done
 # conda deactivate
-##samtools faidx is to eaxtract node1 for each genome
+#samtools faidx is to eaxtract node1 for each genome. Both "samtools faidx" lines work, node 1 will be pulled out.
 
-for x in $(ls ${outDirMain}/blastLists/*); do
+for x in $(ls ${outDirMain}/blastLists/*.fa.txt); do
 	name=$(basename ${x})
 	blastDir=${outDirMain}/blastResults_JC
 	mkdir -p ${blastDir}
@@ -128,7 +134,7 @@ done
 ###Results(column names): query acc.ver, subject acc.ver, % identity, alignment length, mismatches, gap opens, q. start, q. end, s. start, s. end, evalue, bit score
 
 #🌷🌷🌷
-#blast
+blast
 ###shot-1G-1cpu for 2 strains -> OK
 
 ###############################
@@ -238,4 +244,4 @@ done
 }
 
 #🌷🌷🌷
-EditName_SItable
+#EditName_SItable

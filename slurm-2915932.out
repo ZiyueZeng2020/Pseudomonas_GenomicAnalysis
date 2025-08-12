@@ -1,0 +1,22 @@
+usage: panaroo [-h] -i INPUT_FILES [INPUT_FILES ...] -o OUTPUT_DIR
+               --clean-mode {strict,moderate,sensitive}
+               [--remove-invalid-genes] [-c ID] [-f FAMILY_THRESHOLD]
+               [--len_dif_percent LEN_DIF_PERCENT]
+               [--family_len_dif_percent FAMILY_LEN_DIF_PERCENT]
+               [--merge_paralogs] [--search_radius SEARCH_RADIUS]
+               [--refind_prop_match REFIND_PROP_MATCH]
+               [--refind-mode {default,strict,off}]
+               [--min_trailing_support MIN_TRAILING_SUPPORT]
+               [--trailing_recursive TRAILING_RECURSIVE]
+               [--edge_support_threshold EDGE_SUPPORT_THRESHOLD]
+               [--length_outlier_support_proportion LENGTH_OUTLIER_SUPPORT_PROPORTION]
+               [--remove_by_consensus {True,False}]
+               [--high_var_flag CYCLE_THRESHOLD_MIN]
+               [--min_edge_support_sv MIN_EDGE_SUPPORT_SV]
+               [--all_seq_in_graph] [--no_clean_edges] [-a {core,pan}]
+               [--aligner {prank,clustal,mafft,none}] [--codons]
+               [--core_threshold CORE] [--core_subset SUBSET]
+               [--core_entropy_filter HC_THRESHOLD] [-t N_CPU]
+               [--codon-table TABLE] [--quiet] [--version]
+panaroo: error: ambiguous option: --t could match --threshold, --trailing_recursive, --threads
+/var/spool/slurm/job2915932/slurm_script: line 19: --clean-mode: command not found

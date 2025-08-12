@@ -1,0 +1,48 @@
+pre-processing gff3 files...
+  0%|          | 0/29 [00:00<?, ?it/s]  0%|          | 0/29 [00:02<?, ?it/s]
+Error reading prokka input!
+joblib.externals.loky.process_executor._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py", line 463, in _process_worker
+    r = call_item()
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py", line 291, in __call__
+    return self.fn(*self.args, **self.kwargs)
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 598, in __call__
+    return [func(*args, **kwargs)
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 598, in <listcomp>
+    return [func(*args, **kwargs)
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/panaroo/prokka.py", line 148, in get_gene_sequences
+    raise RuntimeError("Error reading prokka input!")
+RuntimeError: Error reading prokka input!
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/panaroo/prokka.py", line 309, in process_prokka_input
+    gene_sequence_list = Parallel(n_jobs=n_cpu)(
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 2007, in __call__
+    return output if self.return_generator else list(output)
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 1650, in _get_outputs
+    yield from self._retrieve()
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 1754, in _retrieve
+    self._raise_error_fast()
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 1789, in _raise_error_fast
+    error_job.get_result(self.timeout)
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 745, in get_result
+    return self._return_or_raise()
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/joblib/parallel.py", line 763, in _return_or_raise
+    raise self._result
+RuntimeError: Error reading prokka input!
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/bin/panaroo", line 10, in <module>
+    sys.exit(main())
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/panaroo/__main__.py", line 342, in main
+    process_prokka_input(args.input_files, args.output_dir,
+  File "/mnt/apps/users/zzeng/conda/envs/panaroo/lib/python3.9/site-packages/panaroo/prokka.py", line 321, in process_prokka_input
+    raise RuntimeError("Error reading prokka input!")
+RuntimeError: Error reading prokka input!
